@@ -1,3 +1,4 @@
+import { CATEGORY } from "./enum";
 import { TProduct, TPurchase, TUser } from "./types";
 
 export const users: TUser[] = [
@@ -18,13 +19,19 @@ export const product: TProduct[] = [
         id: "0",
         name: "cadeira",
         price: 200,
-        category: "mobília"
+        category: CATEGORY.FURNITURE
     },
     {
         id: "1",
         name: "mesa",
         price: 400,
-        category: "mobília"
+        category: CATEGORY.FURNITURE
+    },
+    {
+        id: "2",
+        name: "cadeira luxuosa",
+        price: 500,
+        category: CATEGORY.FURNITURE
     }
 ]
 
@@ -57,3 +64,113 @@ export const purchase: TPurchase[] = [
         totalPrice: product[0].price * 4
     }
 ]
+
+//funções
+
+//exercicio 1
+
+export const creatUser = (id:string, email:string, password:string):void => {
+    const userExist = users.find((user) => {
+        return user.id === id || user.email === email
+    })
+
+    if(userExist){
+        console.log("usuario já existe")
+    } else {
+        users.push({
+            id,
+            email,
+            password
+        })
+        console.log("Usuario cadastrado com sucesso")
+        console.log("usuários: ", users, "\n")
+    }
+}
+
+export const getAllUsers = ():void => {
+    const userEmail = users.map((user) => {
+        return user.email
+    })
+    console.log("emails: ", userEmail, "\n")
+}
+
+//exercicio 2
+
+export const createProduct = (id: string, name: string, price: number, category: CATEGORY):void => {
+    const productExist = product.find((prod) => {
+        return prod.id === id || prod.name === name
+    })
+
+    if(productExist){
+        console.log("produto já existe \n")
+    } else {
+        product.push({
+            id,
+            name,
+            price,
+            category
+        })
+        console.log("produto cadastrado com sucesso")
+        console.log("produtos: ", product, "\n")
+    }
+}
+
+export const getAllProducts = ():void => {
+    const allProducts = product.map((prod) => {
+        return prod.name
+    })
+    console.log("Todos os produtos: ", allProducts, "\n")
+}
+
+export const getProductById = (id:string):void => {
+    const productFind = product.find((prod) => {
+        return prod.id === id
+    })
+
+    if(productFind){
+        console.log("Produto encontrado: ", productFind, "\n")
+    } else {
+        console.log("Produto inexistente \n")
+    }
+}
+
+//exercicio 3
+
+export const queryProductsByName = (q: string):void => {
+    const productQuery = q !== "" && product.filter((prod) => {
+        return prod.name.toLowerCase().includes(q.toLowerCase())
+    })  
+    //ou
+    // const productQuery = q.length !== 0  ? product.filter((prod) => {
+    //     return prod.name.toLowerCase().includes(q.toLowerCase())
+    // }) : false
+
+    if(productQuery){
+        console.log("Lista de produtos com o nome pesquisado: ", productQuery, "\n")
+    } else {
+        console.log("Não foi possível encontrar produto pesquisado \n")
+    }
+}
+
+export const createPurchase = (userId: string | undefined, product:string, quantity:number, totalPrice:number): void => {
+    purchase.push({
+        userId,
+        product,
+        quantity,
+        totalPrice
+    })
+
+    console.log("purchase atualizado: ", purchase, "\n")
+}
+
+export const purchaseFromUser = (id: string):void => {
+    const user = purchase.filter((purc) => {
+        return purc.userId === id
+    })
+
+    if(user.length){
+        console.log("Todas as compras desse usuário: ", user)
+    } else {
+        console.log("Não foi possível encontrar as compras desse user")
+    }
+}
