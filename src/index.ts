@@ -9,16 +9,16 @@ getAllUsers()
 
 console.log("\n -------------exercicio 2--------------- \n ")
 
-createProduct("p004", "Monitor HD", 800, CATEGORY.ELECTRONICS)
+createProduct("6", "boneco luxuoso", 800, CATEGORY.DOLL)
 
 getAllProducts()
 
-getProductById("p004")
+getProductById("6")
 
 console.log("\n -------------exercicio 3--------------- \n")
 
-queryProductsByName("")
+queryProductsByName("boneco")
 
-createPurchase("u003", "p004", 2, 1600)
+createPurchase("u003", "6", 2, 1600)
 
 purchaseFromUser("1")

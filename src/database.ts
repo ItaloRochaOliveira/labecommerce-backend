@@ -17,22 +17,40 @@ export const users: TUser[] = [
 export const product: TProduct[] = [
     {
         id: "0",
-        name: "cadeira",
-        price: 200,
-        category: CATEGORY.FURNITURE
-    },
-    {
+        name: "Nave acustica",
+        price: 70.10,
+        category: CATEGORY.TOY
+      },
+      {
         id: "1",
-        name: "mesa",
-        price: 400,
-        category: CATEGORY.FURNITURE
-    },
-    {
+        name: "Kit Sistema Solar",
+        price: 89.99,
+        category: CATEGORY.TOY
+      },
+      {
         id: "2",
-        name: "cadeira luxuosa",
-        price: 500,
-        category: CATEGORY.FURNITURE
-    }
+        name: "Onibus espacial",
+        price: 207,
+        category: CATEGORY.TOY
+      },
+      {
+        id: "3",
+        name: "Briquedo de matematica com tematica astronauta",
+        price: 267,
+        category: CATEGORY.TOY
+      },
+      {
+        id: "4",
+        name: "6 peças de coelhos astronautas",
+        price: 65,
+        category: CATEGORY.DOLL
+      },
+      {
+        id: "5",
+        name: "Boneco astronauta com ornamento externo",
+        price: 83,
+        category: CATEGORY.DOLL
+      }
 ]
 
 function existeIdNoUser(id:string):string | undefined {
