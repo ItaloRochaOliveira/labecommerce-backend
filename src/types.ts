@@ -1,21 +1,21 @@
-import { CATEGORY } from "./enum"
+import { CATEGORY } from "./enum";
 
 export type TUser = {
-    id: string,
-    email: string,
-    password: string
-}
+  id: string;
+  email: string;
+  password: string;
+};
 
 export type TProduct = {
-    id: string,
-    name: string,
-    price: number,
-    category: CATEGORY
-}
+  id: string;
+  name: string;
+  price: number;
+  category: CATEGORY;
+};
 
 export type TPurchase = {
-    userId: string | undefined,
-    product: string,
-    quantity: number,
-    totalPrice: number
-}
+  userId: string;
+  productId: string;
+  quantity: number;
+  totalPrice: number;
+};
