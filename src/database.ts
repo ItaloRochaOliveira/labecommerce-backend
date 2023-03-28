@@ -87,103 +87,103 @@ export const purchase: TPurchase[] = [
 
 //exercicio 1
 
-export const creatUser = (
-  id: string,
-  email: string,
-  password: string
-): void => {
-  const userExist = users.find((user) => {
-    return user.id === id || user.email === email;
-  });
+// export const creatUser = (
+//   id: string,
+//   email: string,
+//   password: string
+// ): void => {
+//   const userExist = users.find((user) => {
+//     return user.id === id || user.email === email;
+//   });
 
-  if (userExist) {
-    console.log("usuario já existe");
-  } else {
-    users.push({
-      id,
-      email,
-      password,
-    });
-    console.log("Usuario cadastrado com sucesso");
-    console.log("usuários: ", users, "\n");
-  }
-};
+//   if (userExist) {
+//     console.log("usuario já existe");
+//   } else {
+//     users.push({
+//       id,
+//       email,
+//       password,
+//     });
+//     console.log("Usuario cadastrado com sucesso");
+//     console.log("usuários: ", users, "\n");
+//   }
+// };
 
-export const getAllUsers = (): void => {
-  const userEmail = users.map((user) => {
-    return user.email;
-  });
-  console.log("emails: ", userEmail, "\n");
-};
+// export const getAllUsers = (): void => {
+//   const userEmail = users.map((user) => {
+//     return user.email;
+//   });
+//   console.log("emails: ", userEmail, "\n");
+// };
 
-//exercicio 2
+// //exercicio 2
 
-export const createProduct = (
-  id: string,
-  name: string,
-  price: number,
-  category: CATEGORY
-): void => {
-  const productExist = product.find((prod) => {
-    return prod.id === id || prod.name === name;
-  });
+// export const createProduct = (
+//   id: string,
+//   name: string,
+//   price: number,
+//   category: CATEGORY
+// ): void => {
+//   const productExist = product.find((prod) => {
+//     return prod.id === id || prod.name === name;
+//   });
 
-  if (productExist) {
-    console.log("produto já existe \n");
-  } else {
-    product.push({
-      id,
-      name,
-      price,
-      category,
-    });
-    console.log("produto cadastrado com sucesso");
-    console.log("produtos: ", product, "\n");
-  }
-};
+//   if (productExist) {
+//     console.log("produto já existe \n");
+//   } else {
+//     product.push({
+//       id,
+//       name,
+//       price,
+//       category,
+//     });
+//     console.log("produto cadastrado com sucesso");
+//     console.log("produtos: ", product, "\n");
+//   }
+// };
 
-export const getAllProducts = (): void => {
-  const allProducts = product.map((prod) => {
-    return prod.name;
-  });
-  console.log("Todos os produtos: ", allProducts, "\n");
-};
+// export const getAllProducts = (): void => {
+//   const allProducts = product.map((prod) => {
+//     return prod.name;
+//   });
+//   console.log("Todos os produtos: ", allProducts, "\n");
+// };
 
-export const getProductById = (id: string): void => {
-  const productFind = product.find((prod) => {
-    return prod.id === id;
-  });
+// export const getProductById = (id: string): void => {
+//   const productFind = product.find((prod) => {
+//     return prod.id === id;
+//   });
 
-  if (productFind) {
-    console.log("Produto encontrado: ", productFind, "\n");
-  } else {
-    console.log("Produto inexistente \n");
-  }
-};
+//   if (productFind) {
+//     console.log("Produto encontrado: ", productFind, "\n");
+//   } else {
+//     console.log("Produto inexistente \n");
+//   }
+// };
 
-//exercicio 3
+// //exercicio 3
 
-export const queryProductsByName = (q: string): void => {
-  const productQuery =
-    q !== "" &&
-    product.filter((prod) => {
-      return prod.name.toLowerCase().includes(q.toLowerCase());
-    });
-  //ou
-  // const productQuery = q.length !== 0  ? product.filter((prod) => {
-  //     return prod.name.toLowerCase().includes(q.toLowerCase())
-  // }) : false
+// export const queryProductsByName = (q: string): void => {
+//   const productQuery =
+//     q !== "" &&
+//     product.filter((prod) => {
+//       return prod.name.toLowerCase().includes(q.toLowerCase());
+//     });
+//ou
+// const productQuery = q.length !== 0  ? product.filter((prod) => {
+//     return prod.name.toLowerCase().includes(q.toLowerCase())
+// }) : false
 
-  if (productQuery) {
-    console.log(
-      "Lista de produtos com o nome pesquisado: ",
-      productQuery,
-      "\n"
-    );
-  } else {
-    console.log("Não foi possível encontrar produto pesquisado \n");
-  }
-};
+//   if (productQuery) {
+//     console.log(
+//       "Lista de produtos com o nome pesquisado: ",
+//       productQuery,
+//       "\n"
+//     );
+//   } else {
+//     console.log("Não foi possível encontrar produto pesquisado \n");
+//   }
+// };
 
 // export const createPurchase = (
 //   userId: string | undefined,
