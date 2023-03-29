@@ -2,15 +2,28 @@ import { Request, Response } from "express";
 import { product } from "../database";
 
 export const getProductById = (req: Request, res: Response) => {
-  const searchProductId = req.params.id;
+  try {
+    const searchProductId = req.params.id;
 
-  const productFind = product.find((prod) => prod.id === searchProductId);
+    const productFind = product.find((prod) => prod.id === searchProductId);
 
-  if (!productFind) {
-    return res
-      .status(400)
-      .send("Não foi possível encontrar o produto pesquisado");
+    if (!productFind) {
+      res.status(404);
+      throw new Error("Não foi possível encontrar o produto pesquisado");
+    }
+
+    res.status(200).send(productFind);
+  } catch (error) {
+    console.log(error);
+
+    if (res.statusCode === 200) {
+      res.statusCode = 500;
+    }
+
+    if (error instanceof Error) {
+      res.send(error.message);
+    } else {
+      res.send("erro inesperado");
+    }
   }
-
-  res.status(200).send(productFind);
 };

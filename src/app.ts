@@ -25,11 +25,11 @@ app.listen(3003, () => {
 
 //all get:
 app.get("/users", getAllUsers);
-app.get("/users/:id/purchase", getUserPurchaseById);
 app.get("/products", getAllProducts);
 app.get("/products/search", getProductByName);
 app.get("/products/:id", getProductById);
 app.get("/purchase", getAllPurchase);
+app.get("/users/:id/purchase", getUserPurchaseById);
 
 //all post:
 app.post("/users", creatUser);
