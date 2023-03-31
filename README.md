@@ -29,9 +29,12 @@ npm start
 ### Funcionalidades
 ```bash
 . Requisições: 
--Usuários: podendo "chamar", criar, modificar e deletar eles, com os métodos get, post, put e delete consecutivamente.
--Produtos: podendo "chamar", criar, modificar e deletar eles, com os métodos get, post, put e delete consecutivamente.
--Compras: podendo "chamar", criar, modificar e deletar eles, com os métodos get, post, put e delete consecutivamente.
+-Usuários: podendo "chamar", criar, modificar e deletar eles, com os métodos get, post, put e 
+delete consecutivamente.
+-Produtos: podendo "chamar", criar, modificar e deletar eles, com os métodos get, post, put e 
+delete consecutivamente.
+-Compras: podendo "chamar", criar, modificar e deletar eles, com os métodos get, post, put e 
+delete consecutivamente.
 ```
 
 ### Bibliotecas Utilizadas
