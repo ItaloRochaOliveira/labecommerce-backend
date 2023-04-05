@@ -86,5 +86,49 @@ UPDATE produtos
 SET 
     name = "Nave normal",
     price = 60
-WHERE id = "0"
+WHERE id = "0";
+
+------------------------------------------------------------
+
+--CRIANDO TABELA DE COMPRAS
+CREATE TABLE purchases(
+    id TEXT PRIMARY KEY UNIQUE NOT NULL,
+    total_price REAL NOT NULL,
+    paid INTEGER NOT NULL DEFAULT 0,
+    delivered_at TEXT DEFAULT NULL,
+    buyed_id TEXT NOT NULL,
+    Foreign Key (buyed_id) REFERENCES users(id)
+);
+
+--POPULANDO TABELA
+INSERT INTO purchases(id, total_price, buyed_id)
+VALUES  
+    ("p001", 200, "0"),
+    ("p002", 300, "0"),
+    ("p003", 100, "1"),
+    ("p004", 500, "2");
+
+UPDATE purchases
+SET
+    delivered_at = DATETIME("now")
+WHERE id = "p001";
+
+UPDATE purchases 
+SET 
+    paid = 1
+WHERE id = "p001";
+
+SELECT 
+    purchases.id as purchaseId,
+    purchases.total_price as totalPrice,
+    (CASE 
+        WHEN purchases.paid = 0 THEN "not paid"
+        ELSE "paid"
+    END) as paid,
+    purchases.delivered_at as deliveredAt,
+    purchases.buyed_id as buyedId,
+    users.email
+FROM purchases
+INNER JOIN users
+ON purchases.buyed_id = users.id;
 
