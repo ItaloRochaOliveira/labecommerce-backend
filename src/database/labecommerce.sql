@@ -132,3 +132,42 @@ FROM purchases
 INNER JOIN users
 ON purchases.buyed_id = users.id;
 
+
+--EXERCICIO 06/04/2023
+--CRIANDO TABELA DE RELAÇÕES ENTRE PURCHASE E PRODUCTS
+CREATE TABLE purchases_products(
+    purchase_id TEXT NOT NULL,
+    product_id TEXT NOT NULL,
+    quantity INTEGER NOT NULL,
+    Foreign Key (purchase_id) REFERENCES purchases(id),
+    Foreign Key (product_id) REFERENCES produtos(id)
+);
+
+--POPULANDO
+INSERT INTO purchases_products
+VALUES
+    ("p001", "0", 2),
+    ("p001", "4", 1),
+    ("p002", "1", 1),
+    ("p002", "2", 1),
+    ("p003", "1", 1);
+
+--RETORNANDO
+SELECT
+    users.id,
+    users.email,
+    purchases.id as idPurchase,
+    purchases.paid,
+    produtos.id as idProduct,
+    produtos.name,
+    produtos.category,
+    produtos.price,
+    purchases_products.quantity,
+    purchases.total_price
+FROM purchases
+LEFT JOIN purchases_products
+ON purchases_products.purchase_id = purchases.id
+LEFT JOIN produtos
+ON purchases_products.product_id = produtos.id
+LEFT JOIN users
+ON purchases.buyed_id = users.id;
