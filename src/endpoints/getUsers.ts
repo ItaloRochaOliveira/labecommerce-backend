@@ -1,8 +1,12 @@
-import express, { Request, Response } from "express";
-import { users } from "../database";
+import { Request, Response } from "express";
+import { db } from "../database/knex.";
 
-export const getAllUsers = (req: Request, res: Response) => {
+export const getAllUsers = async (req: Request, res: Response) => {
   try {
+    const users = await db.raw(`
+      SELECT * FROM users;
+    `);
+
     if (!users.length) {
       res.statusCode = 404;
       throw new Error("Não há users cadastrados");

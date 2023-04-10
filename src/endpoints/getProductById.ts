@@ -1,18 +1,21 @@
 import { Request, Response } from "express";
-import { product } from "../database";
+import { db } from "../database/knex.";
 
-export const getProductById = (req: Request, res: Response) => {
+export const getProductById = async (req: Request, res: Response) => {
   try {
     const searchProductId = req.params.id;
 
-    const productFind = product.find((prod) => prod.id === searchProductId);
+    const product = await db.raw(`
+      SELECT * FROM product
+      WHERE id = ${searchProductId}
+    `);
 
-    if (!productFind) {
+    if (!product.length) {
       res.status(404);
       throw new Error("Não foi possível encontrar o produto pesquisado");
     }
 
-    res.status(200).send(productFind);
+    res.status(200).send(product);
   } catch (error) {
     console.log(error);
 
