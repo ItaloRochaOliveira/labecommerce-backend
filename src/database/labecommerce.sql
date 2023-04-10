@@ -3,35 +3,43 @@
 --CRIANDO TABELA USERS
 CREATE TABLE users(
     id TEXT PRIMARY KEY UNIQUE NOT NULL,
+    name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL
+    password TEXT NOT NULL,
+    created_at TEXT DEFAULT (DATETIME()) NOT NULL
 );
 
 --POPULANDO TABELA USERS
-INSERT INTO users(id, email, password)
+INSERT INTO users(id, name, email, password)
     VALUES
-        ("0", "it@gmail.com", "40028922"),
-        ("1", "it1@gmail.com", "40028922"),
-        ("2", "it2@gmail.com", "40028922");
+        ("0", "it", "it@gmail.com", "40028922"),
+        ("1", "it", "it1@gmail.com", "40028922"),
+        ("2", "it","it2@gmail.com", "40028922");
+
+DROP TABLE users;
+DROP TABLE purchases;
+DROP TABLE purchases_products;
+DROP TABLE produtos;
 
 ---------------------------------------------------------------
 
 --CRIANDO TABELA PRODUTOS
-CREATE TABLE produtos(
+CREATE TABLE product(
     id TEXT PRIMARY KEY UNIQUE NOT NULL,
     name TEXT NOT NULL,
     price REAL NOT NULL,
-    category TEXT NOT NULL
+    description TEXT NOT NULL,
+    imageUrl TEXT NOT NULL
 );
 
 --POPULANDO TABELA PRODUTOS
-INSERT INTO produtos(id, name, price, category)
+INSERT INTO product(id, name, price, description, imageUrl)
     VALUES
-        ("0", "Nave acustica", 70.1, "brinquedo"),
-        ("1", "Kit Sistema Solar", 89.99, "brinquedo"),
-        ("2", "Onibus espacial", 207, "brinquedo"),
-        ("3", "Briquedo de matematica com tematica astronauta", 267, "brinquedo"),
-        ("4", "6 peças de coelhos astronautas", 65, "boneco");
+        ("0", "Nave acustica", 70.1, "Uma caixa de som com formato de nave.", "./img/nave-acustica.jpg"),
+        ("1", "Kit Sistema Solar", 89.99, "Lampadas com formato de sistema solar", "./img/kit-sistema-solar.jpg"),
+        ("2", "Onibus espacial", 207, "Onibus com tematica de espaço", "./img/onibus-espacial.jpg"),
+        ("3", "Briquedo de matematica com tematica astronauta", 267, "brinquedo matematicom com tema espaço", "./espaco-com-matematica.jpg"),
+        ("4", "6 peças de coelhos astronautas", 65, "Bonequinhos com formato de coelho espacial", "./img/coelho-espacial.jpg");
 
 
 ---------------------------------------------------------------
@@ -95,7 +103,7 @@ CREATE TABLE purchases(
     id TEXT PRIMARY KEY UNIQUE NOT NULL,
     total_price REAL NOT NULL,
     paid INTEGER NOT NULL DEFAULT 0,
-    delivered_at TEXT DEFAULT NULL,
+    delivered_at TEXT DEFAULT (DATETIME()) NOT NULL,
     buyed_id TEXT NOT NULL,
     Foreign Key (buyed_id) REFERENCES users(id)
 );

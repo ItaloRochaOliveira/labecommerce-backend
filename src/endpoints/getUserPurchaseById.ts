@@ -1,22 +1,27 @@
 import { Request, Response } from "express";
 import { purchase, users } from "../database";
+import { db } from "../database/knex.";
 
-export const getUserPurchaseById = (req: Request, res: Response) => {
+export const getUserPurchaseById = async (req: Request, res: Response) => {
   try {
     const searchUserId = req.params.id;
 
-    const userExist = users.find((user) => user.id === searchUserId);
+    const userExist = await db.raw(`
+      SELECT * FROM users
+      WHERE id = "${searchUserId}"
+    `);
 
-    if (!userExist) {
+    if (!userExist.length) {
       res.status(404);
       throw new Error("Não foi possível encontrar o usuário com esse id");
     }
 
-    const userHavePurchase = purchase.filter(
-      (purc) => purc.userId === searchUserId
-    );
+    const userHavePurchase = await db.raw(`
+      SELECT * FROM purchases
+      WHERE buyed_id = "${searchUserId}"
+    `);
 
-    if (!userHavePurchase) {
+    if (!userHavePurchase.length) {
       res.status(404);
       throw new Error("Não foi possível encontrar as compras desse usuário");
     }

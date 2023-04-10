@@ -1,12 +1,25 @@
 import { Request, Response } from "express";
 import { product, purchase, users } from "../database";
 import { TProduct, TPurchase } from "../types";
+import { db } from "../database/knex.";
 
-export const createPurchase = (req: Request, res: Response) => {
+export const createPurchase = async (req: Request, res: Response) => {
   try {
+    const id = req.body.id as string;
     const userId = req.body.userId as string;
     const productId = req.body.productId as string;
     const quantity = req.body.quantity as number;
+
+    if (id !== undefined) {
+      if (typeof id !== "string") {
+        res.status(400);
+        throw Error("id com o tipo errado. Valor esperado: string");
+      }
+      if (!id.length) {
+        res.status(400);
+        throw new Error("id precisa ter no mínimo 1 valor");
+      }
+    }
 
     if (userId !== undefined) {
       if (typeof userId !== "string") {
@@ -41,25 +54,41 @@ export const createPurchase = (req: Request, res: Response) => {
       }
     }
 
-    const userFound = users.find((user) => user.id === userId);
+    const purchaseExist = await db.raw(`
+      SELECT * FROM purchases
+      WHERE id = "${id}";
+    `);
+    console.log(purchaseExist);
 
-    if (!userFound) {
+    if (purchaseExist.length) {
+      res.status(400);
+      throw new Error("Compra já existente com esse id, tente um novo");
+    }
+
+    const users = await db.raw(`
+      SELECT * FROM users
+      WHERE id = "${userId}";
+    `);
+
+    if (!users.length) {
       res.status(404);
       throw new Error("usuário não encontrado");
     }
 
-    const productPrice: TProduct = product.find((prod) => {
-      return prod.id === productId;
-    });
+    const [product] = await db.raw(`
+      SELECT price FROM product
+      WHERE id = "${productId}"
+    `);
+    console.log(product);
 
-    const newPurchase: TPurchase = {
-      userId,
-      productId,
-      quantity,
-      totalPrice: productPrice.price * quantity,
-    };
+    const totalPrice = product.price * quantity;
 
-    purchase.push(newPurchase);
+    const deliveredAt = new Date().toISOString();
+
+    await db.raw(`
+      INSERT INTO purchases(id, total_price, paid, delivered_at, buyed_id)
+      VALUES("${id}", "${totalPrice}", "0", "${deliveredAt}", "${userId}" )
+    `);
 
     res.status(201).send("compra realizada com sucesso.");
   } catch (error) {
