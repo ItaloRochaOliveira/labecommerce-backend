@@ -53,21 +53,32 @@ export const creatUser = async (req: Request, res: Response) => {
       }
     }
 
-    const users = await db.raw(`
-      SELECT * FROM users
-      WHERE id = "${id}"
-      ORDER BY id ASC;
-    `);
+    // const users = await db.raw(`
+    //   SELECT * FROM users
+    //   WHERE id = "${id}"
+    //   ORDER BY id ASC;
+    // `);
+
+    const users = await db("users").where("id", id).orderBy("id", "ASC");
 
     if (users.length) {
       res.status(409);
       throw new Error("Usuário já existente");
     }
 
-    await db.raw(`
-      INSERT INTO users
-      VALUES ("${id}", "${name}", "${email}", "${password}", "${new Date()}");
-    `);
+    // await db.raw(`
+    //   INSERT INTO users
+    //   VALUES ("${id}", "${name}", "${email}", "${password}", "${new Date()}");
+    // `);
+    const newUser = {
+      id,
+      name,
+      email,
+      password,
+      created_at: new Date().toISOString(),
+    };
+
+    await db("users").insert(newUser);
 
     // users.sort((a: TUser, b: TUser): any => {
     //   return a.id < b.id ? Number(a.id) - Number(b.id) : a.id + b.id;

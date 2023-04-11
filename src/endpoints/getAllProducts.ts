@@ -3,9 +3,7 @@ import { db } from "../database/knex.";
 
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
-    const products = await db.raw(`
-      SELECT * FROM product;
-    `);
+    const products = await db("product");
 
     if (!products.length) {
       res.status(400);

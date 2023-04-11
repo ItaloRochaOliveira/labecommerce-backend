@@ -148,7 +148,7 @@ CREATE TABLE purchases_products(
     product_id TEXT NOT NULL,
     quantity INTEGER NOT NULL,
     Foreign Key (purchase_id) REFERENCES purchases(id),
-    Foreign Key (product_id) REFERENCES produtos(id)
+    Foreign Key (product_id) REFERENCES product(id)
 );
 
 --POPULANDO
