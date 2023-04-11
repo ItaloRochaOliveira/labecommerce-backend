@@ -10,10 +10,11 @@ export const getProductByName = async (req: Request, res: Response) => {
       throw new Error("Precisa ter no mínimo um caracter");
     }
 
-    const products = await db.raw(`
-      SELECT * FROM produtos
-      WHERE name LIKE "%${searchProductName}%" 
-    `);
+    const products = await db("product").where(
+      "name",
+      "like",
+      `%${searchProductName}%`
+    );
 
     if (!products.length) {
       res.statusCode = 404;

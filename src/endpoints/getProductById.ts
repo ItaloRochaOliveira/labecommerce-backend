@@ -5,10 +5,7 @@ export const getProductById = async (req: Request, res: Response) => {
   try {
     const searchProductId = req.params.id;
 
-    const product = await db.raw(`
-      SELECT * FROM product
-      WHERE id = ${searchProductId}
-    `);
+    const product = await db("product").where("id", searchProductId);
 
     if (!product.length) {
       res.status(404);
