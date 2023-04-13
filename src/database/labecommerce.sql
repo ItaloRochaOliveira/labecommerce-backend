@@ -19,7 +19,7 @@ INSERT INTO users(id, name, email, password)
 DROP TABLE users;
 DROP TABLE purchases;
 DROP TABLE purchases_products;
-DROP TABLE produtos;
+DROP TABLE product;
 
 ---------------------------------------------------------------
 
@@ -160,22 +160,29 @@ VALUES
     ("p002", "2", 1),
     ("p003", "1", 1);
 
+INSERT INTO purchases_products 
+VALUES 
+    ("p004", "2", 2),
+    ("p004", "1", 1);
+
+SELECT * FROM purchases_products;
+
 --RETORNANDO
 SELECT
     users.id,
     users.email,
     purchases.id as idPurchase,
     purchases.paid,
-    produtos.id as idProduct,
-    produtos.name,
-    produtos.category,
-    produtos.price,
+    product.id as idProduct,
+    product.name,
+    product.description,
+    product.price,
     purchases_products.quantity,
     purchases.total_price
 FROM purchases
 LEFT JOIN purchases_products
 ON purchases_products.purchase_id = purchases.id
-LEFT JOIN produtos
-ON purchases_products.product_id = produtos.id
+LEFT JOIN product
+ON purchases_products.product_id = product.id
 LEFT JOIN users
 ON purchases.buyed_id = users.id;

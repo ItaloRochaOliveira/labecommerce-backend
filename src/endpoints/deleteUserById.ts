@@ -1,19 +1,20 @@
 import { Request, Response } from "express";
-import { users } from "../database";
+import { db } from "../database/knex.";
 
-export const deleteUserById = (req: Request, res: Response) => {
+export const deleteUserById = async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
 
-    const userIndex = users.findIndex((user) => user.id === userId);
+    const [userExist] = await db("users").where("id", userId);
 
-    if (userIndex === -1) {
+    if (!userExist) {
       res.status(404);
       throw new Error("Não foi possível encontrar o usuário");
     }
 
-    users.splice(userIndex, 1);
-    res.status(200).send("User apagado com sucesso");
+    await db("users").del().where("id", userId);
+
+    res.status(200).send("User apagado com sucesso!");
   } catch (error) {
     console.log(error);
 

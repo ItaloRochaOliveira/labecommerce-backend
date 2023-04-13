@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { purchase, users } from "../database";
 import { db } from "../database/knex.";
 
 export const getUserPurchaseById = async (req: Request, res: Response) => {
@@ -13,15 +12,15 @@ export const getUserPurchaseById = async (req: Request, res: Response) => {
       throw new Error("Não foi possível encontrar o usuário com esse id");
     }
 
-    const userHavePurchase = await db
+    const [userHavePurchase] = await db
       .select(
         "purchases.id",
-        "purchases.total_price",
+        "purchases.total_price AS totalPrice",
         db.raw(
           "case when purchases.paid = 0 then 'false' else 'true' end AS isPaid"
         ),
-        "purchases.delivered_at",
-        "purchases.buyed_id",
+        "purchases.delivered_at AS deliveredAt",
+        "purchases.buyed_id AS buyedId",
         "users.email",
         "users.name"
       )
@@ -29,20 +28,19 @@ export const getUserPurchaseById = async (req: Request, res: Response) => {
       .where("buyed_id", searchUserId)
       .innerJoin("users", "users.id", "purchases.buyed_id");
 
-    if (!userHavePurchase.length) {
+    if (!userHavePurchase) {
       res.status(404);
       throw new Error("Não foi possível encontrar as compras desse usuário");
     }
 
     const productsList = await db
-      .select("product.*")
+      .select("product.*", "purchases_products.quantity")
       .from("purchases_products")
-      .where("purchases_products.purchase_id", userHavePurchase[0].id)
+      .where("purchases_products.purchase_id", userHavePurchase.id)
       .innerJoin("product", "product.id", "purchases_products.product_id");
+    console.log(productsList);
 
-    userHavePurchase[0] = { ...userHavePurchase[0], productsList };
-
-    res.status(200).send(userHavePurchase);
+    res.status(200).send({ ...userHavePurchase, productsList });
   } catch (error) {
     console.log(error);
 
