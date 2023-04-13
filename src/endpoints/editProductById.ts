@@ -1,15 +1,16 @@
 import { Request, Response } from "express";
-import { product } from "../database";
 import { CATEGORY } from "../enum";
+import { db } from "../database/knex.";
 
-export const editProductById = (req: Request, res: Response) => {
+export const editProductById = async (req: Request, res: Response) => {
   try {
     const productId = req.params.id;
 
     const id = req.body.id as string;
     const newName = req.body.name as string | undefined;
     const newPrice = req.body.price as number | undefined;
-    const newCategory = req.body.category as CATEGORY | undefined;
+    const newDescription = req.body.description as string | undefined;
+    const newImageUrl = req.body.imageUrl as string | undefined;
 
     if (id !== undefined) {
       if (typeof id !== "string") {
@@ -18,7 +19,7 @@ export const editProductById = (req: Request, res: Response) => {
       }
       if (!id.length) {
         res.status(400);
-        throw new Error("Id precisa ter no mínimo 1 valor");
+        throw new Error("Id precisa ter no mínimo 1 caracter");
       }
     }
 
@@ -29,7 +30,7 @@ export const editProductById = (req: Request, res: Response) => {
       }
       if (!newName.length) {
         res.status(400);
-        throw new Error("newName precisa ter no mínimo 1 valor");
+        throw new Error("newName precisa ter no mínimo 1 caracter");
       }
     }
 
@@ -43,13 +44,16 @@ export const editProductById = (req: Request, res: Response) => {
         throw new Error("newPrice precisa tem que ser maior que 0");
       }
     }
-
-    if (newCategory !== undefined) {
-      if (newCategory !== CATEGORY.TOY && newCategory !== CATEGORY.DOLL) {
+    if (newDescription !== undefined) {
+      if (typeof newDescription !== "string") {
         res.status(400);
         throw new Error(
-          "categoria com o tipo errado, esperado brinquedo ou boneco como tipo"
+          "newDescription com o tipo errado. Valor esperado: string"
         );
+      }
+      if (!newDescription.length) {
+        res.status(400);
+        throw new Error("newDescription precisa ter no mínimo 1 caracter");
       }
     }
 
@@ -60,18 +64,21 @@ export const editProductById = (req: Request, res: Response) => {
       throw new Error("id informado no parametro não bate com o do body");
     }
 
-    const productForChange = product.find((prod) => prod.id === productId);
+    const [product] = await db("product").where("id", productId);
 
-    if (!productForChange) {
+    if (!product) {
       res.status(404);
       throw new Error("Não foi possivel achar o produto para atualização.");
     }
 
-    productForChange.name = newName || productForChange.name;
-    productForChange.price = isNaN(newPrice)
-      ? productForChange.price
-      : newPrice;
-    productForChange.category = newCategory || productForChange.category;
+    const newProduct = {
+      name: newName || product.name,
+      price: newPrice || product.price,
+      description: newDescription || product.description,
+      imageUrl: newImageUrl || product.imageUrl,
+    };
+
+    await db("product").update(newProduct).where("id", productId);
 
     res.status(200).send("Cadastro atualizado com sucesso");
   } catch (error) {

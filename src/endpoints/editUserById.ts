@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
-import { users } from "../database";
+import { db } from "../database/knex.";
 
-export const editUserById = (req: Request, res: Response) => {
+export const editUserById = async (req: Request, res: Response) => {
   try {
     const userId = req.params.id;
 
     const id = req.body.id as string | undefined;
+    const name = req.body.name as string | undefined;
     //   const newEmail = req.body.email as string | undefined;
     const newPassword = req.body.password as string | undefined;
 
@@ -16,7 +17,18 @@ export const editUserById = (req: Request, res: Response) => {
       }
       if (!id.length) {
         res.status(400);
-        throw new Error("Id precisa ter no mínimo 1 valor");
+        throw new Error("Id precisa ter no mínimo 1 caracter");
+      }
+    }
+
+    if (name !== undefined) {
+      if (typeof name !== "string") {
+        res.status(400);
+        throw new Error("name tem que ser tipo string");
+      }
+      if (!name.length) {
+        res.status(400);
+        throw new Error("name precisa ter no mínimo 1 caracter");
       }
     }
 
@@ -27,7 +39,7 @@ export const editUserById = (req: Request, res: Response) => {
       }
       if (!newPassword.length) {
         res.status(400);
-        throw new Error("newPassword precisa ter no mínimo 1 valor");
+        throw new Error("newPassword precisa ter no mínimo 1 caracter");
       }
     }
 
@@ -40,7 +52,7 @@ export const editUserById = (req: Request, res: Response) => {
       );
     }
 
-    const userForChange = users.find((user) => user.id === userId);
+    const [userForChange] = await db("users").where("id", userId);
 
     if (!userForChange) {
       res.status(404);
@@ -52,15 +64,10 @@ export const editUserById = (req: Request, res: Response) => {
     //       .status(200)
     //       .send("Email semelhante a anterior, tente outro email");
     //   }
-    if (userForChange.password === newPassword) {
-      res.status(400);
-      throw new Error("Senha semelhante a anterior, tente outra senha");
-    }
 
     //   userForChange.email = newEmail || userForChange.email;
-    if (userForChange) {
-      userForChange.password = newPassword || userForChange.password;
-    }
+
+    await db("users").update({ password: newPassword, name }).where("id", id);
 
     res.status(200).send("Cadastro atualizado com sucesso");
   } catch (error) {

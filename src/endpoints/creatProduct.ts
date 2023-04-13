@@ -64,29 +64,22 @@ export const createProduct = async (req: Request, res: Response) => {
       }
     }
 
-    const [products] = await db.raw(`
-      SELECT * FROM product
-      WHERE id = "${id}"
-    `);
+    const [products] = await db("product").where("id", id);
 
     if (products) {
       res.status(409);
       throw new Error("Produto já existente");
     }
 
-    // if (
-    //   typeof id !== "string" ||
-    //   typeof name !== "string" ||
-    //   typeof price !== "number" ||
-    //   typeof category !== "string"
-    // ) {
-    //   res.status(400).send("Objeto com valores errados: id como string...");
-    // }
+    const newProduct = {
+      id: id,
+      name,
+      price,
+      description,
+      imageUrl,
+    };
 
-    await db.raw(`
-      INSERT INTO product 
-      VALUES ("${id}", "${name}", "${price}", "${description}", "${imageUrl}")
-    `);
+    await db("product").insert(newProduct);
 
     res.status(201).send("Cadastrado com sucesso");
   } catch (error) {

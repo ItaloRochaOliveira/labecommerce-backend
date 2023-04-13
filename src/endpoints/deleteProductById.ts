@@ -1,18 +1,19 @@
 import { Request, Response } from "express";
-import { product } from "../database";
+import { db } from "../database/knex.";
 
-export const deleteProductById = (req: Request, res: Response) => {
+export const deleteProductById = async (req: Request, res: Response) => {
   try {
     const productId = req.params.id;
 
-    const productIndex = product.findIndex((prod) => prod.id === productId);
+    const [productExist] = await db("product").where("id", productId);
 
-    if (productIndex === -1) {
+    if (!productExist) {
       res.status(404);
       throw new Error("Não foi possível encontrar o produto para a exclusão");
     }
 
-    product.splice(productIndex, 1);
+    await db("product").del().where("id", productId);
+
     res.status(200).send("Produto apagado com sucesso");
   } catch (error) {
     console.log(error);

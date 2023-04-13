@@ -13,6 +13,9 @@ import { deleteUserById } from "./endpoints/deleteUserById";
 import { deleteProductById } from "./endpoints/deleteProductById";
 import { editUserById } from "./endpoints/editUserById";
 import { editProductById } from "./endpoints/editProductById";
+import { deletePurchaseById } from "./endpoints/deletePurchaseById";
+
+// ./minha-pasta/index.js
 
 const app = express();
 
@@ -39,6 +42,7 @@ app.post("/purchase", createPurchase);
 //all delete:
 app.delete("/users/:id", deleteUserById);
 app.delete("/product/:id", deleteProductById);
+app.delete("/purchase/:id", deletePurchaseById);
 
 //all put:
 app.put("/users/:id", editUserById);

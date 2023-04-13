@@ -59,17 +59,17 @@ export const creatUser = async (req: Request, res: Response) => {
     //   ORDER BY id ASC;
     // `);
 
-    const users = await db("users").where("id", id).orderBy("id", "ASC");
+    const users = await db("users")
+      .where("id", id)
+      .orWhere("name", name)
+      .orWhere("email", email)
+      .orderBy("id", "ASC");
 
     if (users.length) {
       res.status(409);
       throw new Error("Usuário já existente");
     }
 
-    // await db.raw(`
-    //   INSERT INTO users
-    //   VALUES ("${id}", "${name}", "${email}", "${password}", "${new Date()}");
-    // `);
     const newUser = {
       id,
       name,
