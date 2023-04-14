@@ -69,7 +69,7 @@ export const editUserById = async (req: Request, res: Response) => {
 
     await db("users").update({ password: newPassword, name }).where("id", id);
 
-    res.status(200).send("Cadastro atualizado com sucesso");
+    res.status(200).send("Cadastro atualizado com sucesso!");
   } catch (error) {
     console.log(error);
 

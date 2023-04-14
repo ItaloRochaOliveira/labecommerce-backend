@@ -81,7 +81,7 @@ export const createProduct = async (req: Request, res: Response) => {
 
     await db("product").insert(newProduct);
 
-    res.status(201).send("Cadastrado com sucesso");
+    res.status(201).send("Cadastrado com sucesso!");
   } catch (error) {
     console.log(error);
 
