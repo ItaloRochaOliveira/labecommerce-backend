@@ -12,9 +12,9 @@ CREATE TABLE users(
 --POPULANDO TABELA USERS
 INSERT INTO users(id, name, email, password)
     VALUES
-        ("0", "it", "it@gmail.com", "40028922"),
-        ("1", "it", "it1@gmail.com", "40028922"),
-        ("2", "it","it2@gmail.com", "40028922");
+        ("0", "user0", "user0@gmail.com", "40028922"),
+        ("1", "user1", "user1@gmail.com", "40028922"),
+        ("2", "user2","user2@gmail.com", "40028922");
 
 DROP TABLE users;
 DROP TABLE purchases;

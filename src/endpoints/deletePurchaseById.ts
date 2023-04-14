@@ -16,7 +16,7 @@ export const deletePurchaseById = async (req: Request, res: Response) => {
 
     await db("purchases").del().where("id", purchaseId);
 
-    res.status(200).send("Produto apagado com sucesso");
+    res.status(200).send("Produto apagado com sucesso!");
   } catch (error) {
     console.log(error);
 

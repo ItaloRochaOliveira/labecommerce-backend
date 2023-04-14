@@ -80,7 +80,7 @@ export const editProductById = async (req: Request, res: Response) => {
 
     await db("product").update(newProduct).where("id", productId);
 
-    res.status(200).send("Cadastro atualizado com sucesso");
+    res.status(200).send("Cadastro atualizado com sucesso!");
   } catch (error) {
     console.log(error);
 

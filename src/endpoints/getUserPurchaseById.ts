@@ -12,9 +12,9 @@ export const getUserPurchaseById = async (req: Request, res: Response) => {
       throw new Error("Não foi possível encontrar o usuário com esse id");
     }
 
-    const [userHavePurchase] = await db
+    const userHavePurchase = await db
       .select(
-        "purchases.id",
+        "purchases.id AS purchaseId",
         "purchases.total_price AS totalPrice",
         db.raw(
           "case when purchases.paid = 0 then 'false' else 'true' end AS isPaid"
@@ -28,19 +28,26 @@ export const getUserPurchaseById = async (req: Request, res: Response) => {
       .where("buyed_id", searchUserId)
       .innerJoin("users", "users.id", "purchases.buyed_id");
 
-    if (!userHavePurchase) {
+    if (!userHavePurchase.length) {
       res.status(404);
       throw new Error("Não foi possível encontrar as compras desse usuário");
     }
 
-    const productsList = await db
-      .select("product.*", "purchases_products.quantity")
-      .from("purchases_products")
-      .where("purchases_products.purchase_id", userHavePurchase.id)
-      .innerJoin("product", "product.id", "purchases_products.product_id");
-    console.log(productsList);
+    const productsList: any = [];
 
-    res.status(200).send({ ...userHavePurchase, productsList });
+    for (let purchase of userHavePurchase) {
+      const result: any = await db
+        .select("product.*", "purchases_products.quantity")
+        .from("purchases_products")
+        .where("purchases_products.purchase_id", purchase.purchaseId)
+        .innerJoin("product", "product.id", "purchases_products.product_id");
+
+      purchase = { ...purchase, products: result };
+
+      productsList.push(purchase);
+    }
+
+    res.status(200).send(productsList);
   } catch (error) {
     console.log(error);
 

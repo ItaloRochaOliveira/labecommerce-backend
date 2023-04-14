@@ -19,7 +19,7 @@ export const createPurchase = async (req: Request, res: Response) => {
       }
       if (!id.length) {
         res.status(400);
-        throw new Error("id precisa ter no mínimo 1 valor");
+        throw new Error("id precisa ter no mínimo 1 caracter");
       }
     }
 
@@ -30,8 +30,13 @@ export const createPurchase = async (req: Request, res: Response) => {
       }
       if (!userId.length) {
         res.status(400);
-        throw new Error("userId precisa ter no mínimo 1 valor");
+        throw new Error("userId precisa ter no mínimo 1 caracter");
       }
+    }
+
+    if (!products.length) {
+      res.status(400);
+      throw Error("É necessário ter pelo menos um produto.");
     }
 
     products.map((product: TProduct): void => {
@@ -42,7 +47,7 @@ export const createPurchase = async (req: Request, res: Response) => {
         }
         if (!product.productId.length) {
           res.status(400);
-          throw new Error("productId precisa ter no mínimo 1 valor");
+          throw new Error("productId precisa ter no mínimo 1 caracter");
         }
       }
 
@@ -77,35 +82,43 @@ export const createPurchase = async (req: Request, res: Response) => {
 
     // const totalPrice = product.price * quantity;
 
-    const totalPrice = products.map(
-      async (product: TProduct): Promise<number> => {
-        const productA = await db("product").where("id", product.productId);
-        const total = product.quantity * productA[0].price;
-        console.log(total);
-        return total;
-      }
+    const productForSeach = await db("product");
+
+    const prices = products.map((product: TProduct) => {
+      const prod = productForSeach.find(
+        (prod: any) => prod.id === product.productId
+      );
+
+      const total = product.quantity * prod.price;
+
+      return total;
+    });
+
+    const totalPrice = prices.reduce(
+      (accumulator: number, value: number) => accumulator + value,
+      0
     );
-    console.log(totalPrice);
 
-    // const deliveredAt = new Date().toISOString();
+    const deliveredAt = new Date().toISOString();
 
-    // const newPurchase = {
-    //   id,
-    //   total_price: totalPrice,
-    //   paid: "0",
-    //   delivered_at: deliveredAt,
-    //   buyed_id: userId,
-    // };
+    const newPurchase = {
+      id,
+      total_price: totalPrice,
+      paid: "0",
+      delivered_at: deliveredAt,
+      buyed_id: userId,
+    };
 
-    // await db("purchases").insert(newPurchase);
+    await db("purchases").insert(newPurchase);
 
-    // await db("purchases_products").insert({
-    //   purchase_id: id,
-    //   product_id: productId,
-    //   quantity,
-    // });
-
-    // res.status(201).send("compra realizada com sucesso.");
+    products.map(async (product: TProduct) => {
+      await db("purchases_products").insert({
+        purchase_id: id,
+        product_id: product.productId,
+        quantity: product.quantity,
+      });
+    });
+    res.status(201).send("compra realizada com sucesso.");
   } catch (error) {
     console.log(error);
 

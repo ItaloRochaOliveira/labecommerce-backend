@@ -84,7 +84,7 @@ export const creatUser = async (req: Request, res: Response) => {
     //   return a.id < b.id ? Number(a.id) - Number(b.id) : a.id + b.id;
     // });
 
-    res.status(201).send("Cadastrado com sucesso");
+    res.status(201).send("Cadastrado com sucesso!");
   } catch (error) {
     console.log(error);
 
