@@ -53,7 +53,8 @@ typescript
 ```
 
 ## 💡Programas utilizados:
-- VSCode -PostMan
+- VSCode 
+- PostMan
 
 ## 💻Tecnologias 
 
